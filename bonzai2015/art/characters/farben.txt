@@ -1,0 +1,34 @@
+Red:
+  Outline: 8a3029ff
+  Fill: c5625aff
+  Shadow: ab3f40ff
+
+  Outline: 954f13ff
+  Fill: c18541ff
+  Shadow: b96c22ff
+
+Blue:
+  Outline: 272d73ff
+  Fill: 495cb7ff
+  Shadow: 2f369eff
+
+  Outline: 59878cff
+  Fill: 87bec1ff
+  Shadow: 4d989aff
+
+Yellow:
+  Outline: d3a314ff
+  Fill: f4e91dff
+  Shadow: e4c530ff
+
+  Outline: 532f11ff
+  Fill: a67204ff
+  Shadow: 89591aff
+Green:
+  Outline: 2c5124ff
+  Fill: 55983cff
+  Shadow: 376e33ff
+
+  Outline: 2c604dff
+  Fill: 91bc1aff
+  Shadow: 5d9627ff

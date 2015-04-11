@@ -1,0 +1,12 @@
+[Scenario]
+Tiny
+2
+3
+7 7
+E E E 0 E E E 
+E 0 0 X 0 1 E 
+X X X X X X 1 
+1 X X B X X 1 
+1 X X X X X 1 
+1 1 X X X 0 X 
+E E 0 0 0 E E 

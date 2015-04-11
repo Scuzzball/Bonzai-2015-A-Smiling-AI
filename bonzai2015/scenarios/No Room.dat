@@ -1,0 +1,20 @@
+[Scenario]
+No Room
+3
+3
+15 15
+E E E E E E E E E E E E E E E 
+E E E E E X X X E E E E E E E 
+E E E E E X B X 1 1 E X E E E 
+E E E 1 1 X X X X X X B X E E 
+E X X X X B X X B X X X X E E 
+E X B X X X X X X X X X 2 E E 
+E E X X X X X B X X B X 2 E E 
+E E 0 X B X X X X X X X X X E 
+E E 0 X X X X X X B X X B X E 
+E E X B X X B X X X X 2 X E E 
+E E X X X 0 X X X X 2 E E E E 
+E E E E E E 0 X B X E E E E E 
+E E E E E E E E X E E E E E E 
+E E E E E E E E E E E E E E E 
+E E E E E E E E E E E E E E E 

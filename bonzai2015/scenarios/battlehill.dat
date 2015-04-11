@@ -1,0 +1,17 @@
+[Scenario]
+Battle Hill
+2
+3
+13 12
+E E E E E 0 E 0 E E E E E 
+E E E 0 0 X 0 X 0 0 E E E 
+E 0 0 X X X X X X X 0 0 E 
+0 X X X X X B X X X X X 0 
+0 X X B X X X X X B X X 0 
+0 E X X X X X X X X X E 0 
+E E X X X X B X X X X E E 
+1 X X B X X X X X B X X 1 
+1 X X X X X X X X X X X 1 
+1 1 X X X X B X X X X 1 1 
+E E 1 1 X X X X X 1 1 E E 
+E E E E 1 1 1 1 1 E E E E 

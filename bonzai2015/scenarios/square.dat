@@ -1,0 +1,26 @@
+[Scenario]
+Sample Map
+6
+3
+21 21
+E 0 X X X X X X X 4 4 4 X X X X X X X 2 E
+E 0 X X X X X X X X X X X X X X X X X 2 E
+0 X X X X X X X X X X X X X X X X X X X 2
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X B X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X B X X X X X B X X X X X B X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X B X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X X
+3 3 X X X X X X X X X X X X X X X X X 1 1
+E 3 X X X X X X X 5 X 5 X X X X X X X 1 E
+E E X E X E X E X E 5 E X E X E X E X E E
