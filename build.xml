@@ -1,22 +1,24 @@
-<project name = "Competitor" default = "ai.competitor">
-	<import file = "common.xml"/>
+<project name="Competitor" default="ai.competitor">
+	<import file="common.xml"/>
 	
-	<path id = "snowbound.classpath">
-		<pathelement location = "${package}/snowbound.jar" />
+	<path id="snowbound.classpath">
+		<pathelement location="${package}/snowbound.jar"/>
 	</path>
 
 	<!-- AI Target(s) -->
-	<target name = "ai.competitor" >
-		<mkdir dir = "${bin}" />
-		<compile source = "" files = "**">
-			<external><classpath refid = "snowbound.classpath"/></external>
+	<target name="ai.competitor">
+		<mkdir dir="${bin}"/>
+		<compile source="" files="**">
+			<external><classpath refid="snowbound.classpath"/></external>
 		</compile>
-		<build jar = "ais/Competitor.jar" source = "./" main = "" />
+		<delete file="bonzai2015/ais/Competitor.jar"/>
+		<build jar="Competitor.jar" source="./" main=""/>
+		<move file="bonzai2015/Competitor.jar" tofile="bonzai2015/ais/Competitor.jar"/>
 	</target>
 	
 	
 	<!-- Run Target(s) -->
 	<target name="run" depends="ai.competitor">
-		<java jar = "${package}/snowbound.jar" fork = "true" dir = "${package}"  />
+		<java jar="${package}/snowbound.jar" fork="true" dir="${package}"/>
 	</target>
 </project>
