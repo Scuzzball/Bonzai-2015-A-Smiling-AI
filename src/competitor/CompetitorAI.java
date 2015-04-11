@@ -176,7 +176,7 @@ public class CompetitorAI extends AI {
 			if (layers.position() != null) {
 				if (actor.position().distance(layers.position()) > 3) {
 					System.out.println("BUCKET: Chasing longcoat");
-					target = min(actor.positionsInMoveRange(), new ManhattanDistance(layers.position()));
+					target = min(actor.positionsInMoveRange(), new ManhattanDistance(goalBase.position()));
 					return new MoveAction(target);
 				}
 			}
