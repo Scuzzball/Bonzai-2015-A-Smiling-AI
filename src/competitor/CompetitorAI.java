@@ -18,6 +18,7 @@ public class CompetitorAI extends AI {
 	Turn turn;
 
 	Base goalBase;
+	List<Position> path;
 
 	public CompetitorAI() {
 		System.err.println("New game");
@@ -40,7 +41,8 @@ public class CompetitorAI extends AI {
 			double con = 0;
 			for(Position spawn : actor.team().spawns()){
 				for(Base base : turn.allBases()){
-					con += 1.0/spawn.distance(base.position());
+
+					con += 1.0/(new Pathfinding()).getPath(turn, spawn, base.position()).size();
 				}
 				if(con > concentration){
 					concentration = con;
@@ -91,7 +93,7 @@ public class CompetitorAI extends AI {
 			layers = actor;
 			goalBase = bestBase(turn,layers.position());
 			// Find and capture bases
-			
+
 			// Check if layers' on a base
 			if (turn.hasBaseAt(layers.position())) {
 				// Check if we own it
@@ -100,7 +102,13 @@ public class CompetitorAI extends AI {
 					return new CaptureAction();
 				}
 			}
-			target = min(actor.positionsInMoveRange(), new ManhattanDistance(bestBase(turn, layers.position()).position()));
+
+			path = (new Pathfinding()).getPath(turn, actor.position(), bestBase(turn, layers.position()).position());
+			if(path.size() < 3){
+				target = path.get(path.size()-1);
+			}else{
+				target = path.get(2);
+			}
 			return new MoveAction(target);
 		default:
 			// Get snowballs, then guard
@@ -114,7 +122,15 @@ public class CompetitorAI extends AI {
 
 			// Protect Layers
 			if (numEnemiesAtBase(goalBase) > numFriendsAtBase(goalBase)) {
-				target = min(actor.positionsInMoveRange(), new ManhattanDistance(goalBase));
+
+
+				path = (new Pathfinding()).getPath(turn, actor.position(), goalBase.position());
+				if(path.size() < 3){
+					target = path.get(path.size()-1);
+				}else{
+					target = path.get(2);
+				}
+
 				System.out.println("BUCKET: helping capture " + target);
 				return new MoveAction(target);
 			}
@@ -169,14 +185,25 @@ public class CompetitorAI extends AI {
 						}
 					}
 				}
-				target = min(actor.positionsInMoveRange(), new ManhattanDistance(next));
+				path = (new Pathfinding()).getPath(turn, actor.position(), next);
+				if(path.size() < 3){
+					target = path.get(path.size()-1);
+				}else{
+					target = path.get(2);
+				}
 				System.out.println(target);
 				return new MoveAction(target);
 			}
 			if (layers.position() != null) {
 				if (actor.position().distance(layers.position()) > 3) {
 					System.out.println("BUCKET: Chasing longcoat");
-					target = min(actor.positionsInMoveRange(), new ManhattanDistance(goalBase.position()));
+
+					path = (new Pathfinding()).getPath(turn, actor.position(), goalBase.position());
+					if(path.size() < 3){
+						target = path.get(path.size()-1);
+					}else{
+						target = path.get(2);
+					}
 					return new MoveAction(target);
 				}
 			}
@@ -192,10 +219,10 @@ public class CompetitorAI extends AI {
 		Position spawn = null;
 		if (layers.position() != null) {
 			for(Position temp : turn.myTeam().spawns()){
-				if (spawn == null) {
+				if (spawn == null && temp != layers.position() && !turn.hasUnitAt(temp)) {
 					spawn = temp;
 				} else {
-					if (temp.distance(layers.position()) < spawn.distance(layers.position())) {
+					if (temp.distance(layers.position()) < spawn.distance(layers.position()) && !turn.hasUnitAt(temp)) {
 						spawn = temp;
 					}
 				}
@@ -214,7 +241,7 @@ public class CompetitorAI extends AI {
 		double con = 0;
 		for(Position temp : turn.actor().team().spawns()){
 			for(Base base : turn.allBases()){
-				if (base.isOwnedBy(turn.myTeam())) continue;
+				if (base.isOwnedBy(turn.myTeam()) || turn.hasUnitAt(temp)) continue;
 				con += 1.0/temp.distance(base.position());
 			}
 			if(con > concentration){
@@ -223,9 +250,13 @@ public class CompetitorAI extends AI {
 			}
 			con = 0;
 		}
-		if (spawn == null) {
-			return any(turn.myTeam().spawns());
+		while (spawn == null) {
+			Position temp = any(turn.myTeam().spawns());
+			if(!turn.hasUnitAt(temp)){
+				return temp;
+			}
 		}
+
 		return spawn;
 	}
 
@@ -255,6 +286,7 @@ public class CompetitorAI extends AI {
 
 	private int numEnemiesAtBase(Base b) {
 		int n = 0;
+		if (b == null) { return 0; }
 		for (Position p: b.coverage()) {
 			if (turn.hasUnitAt(p)) {
 				if (!turn.unitAt(p).team().equals(turn.myTeam())) {
