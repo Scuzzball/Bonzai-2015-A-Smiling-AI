@@ -17,6 +17,7 @@ public class CompetitorAI extends AI {
 	Unit layers;
 	Turn turn;
 
+	Base[] covered = new Base[2];
 	Base goalBase;
 	List<Position> path;
 
@@ -66,17 +67,17 @@ public class CompetitorAI extends AI {
 
 			boolean layersDied = true;
 			for (Unit u: turn.myUnits()) {
-				if (u.perk() == Perk.LAYERS && u.position() != null) {
+				if (u.perk() == Perk.CLEATS && u.position() != null) {
 					layersDied = false;
 				}
 			}
 
-			if (layersDied) {
+			if (layersDied || turn.allTeams().size() == 2) {
 				System.out.println("SPAWNING: Coat");
 				Positionable pos = bestLayerSpawn(turn);
 				System.out.println(pos);
 				layers = actor;
-				return new SpawnAction(pos, Perk.LAYERS);
+				return new SpawnAction(pos, Perk.CLEATS);
 			} else {
 				System.out.println("SPAWNING: Walrus");
 				return new SpawnAction(bestThugSpawn(turn), Perk.BUCKET);
@@ -89,9 +90,9 @@ public class CompetitorAI extends AI {
 
 
 		switch (actor.perk()) {
-		case LAYERS:
+		case CLEATS:
 			layers = actor;
-			goalBase = bestBase(turn,layers.position());
+			goalBase = bestBase(turn,actor.position());
 			// Find and capture bases
 
 			// Check if layers' on a base
@@ -99,16 +100,21 @@ public class CompetitorAI extends AI {
 				// Check if we own it
 				if (!turn.myBases().contains(turn.baseAt(turn.actor().position()))) {
 					// We don't own this base
+
+					covered[0] = covered[1];
+					covered[1] = null;
 					return new CaptureAction();
 				}
 			}
 
-			path = (new Pathfinding()).getPath(turn, actor.position(), bestBase(turn, layers.position()).position());
-			if(path.size() < 3){
+			path = (new Pathfinding()).getPath(turn, actor.position(), goalBase.position());
+			if(path.size() < actor.statistic(Stat.MOVE)){
 				target = path.get(path.size()-1);
 			}else{
-				target = path.get(2);
+				target = path.get(actor.statistic(Stat.MOVE) - 1);
 			}
+			covered[0] = covered[1];
+			covered[1] = goalBase;
 			return new MoveAction(target);
 		default:
 			// Get snowballs, then guard
@@ -261,14 +267,24 @@ public class CompetitorAI extends AI {
 	}
 
 	private Base bestBase(Turn turn, Position pos) {
-		double minCost = 100000000;
+		double minCost = Double.MAX_VALUE;
 		double cost = 0;
 		int conWeight = 2;
 		Base goBase = null;
 		for(Base base : turn.allBases()){
 			if((cost = (new Pathfinding()).getPath(turn, base.position(), pos).size() * conWeight * concentration(turn.enemyUnits(),base.position())) < minCost && !turn.myBases().contains(base)){
-				minCost = cost;
-				goBase = base;
+				if (!base.equals(covered[0]) && !base.equals(covered[1])) {
+					minCost = cost;
+					goBase = base;
+				}
+			}
+		}
+		if(goBase==null){
+			for(Base base : turn.allBases()){
+				if((cost = (new Pathfinding()).getPath(turn, base.position(), pos).size() * conWeight * concentration(turn.enemyUnits(),base.position())) < minCost && !turn.myBases().contains(base)){
+					minCost = cost;
+					goBase = base;
+				}
 			}
 		}
 		return goBase;
